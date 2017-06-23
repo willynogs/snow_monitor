@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    // here is where the snow monitor will go
+    if user
+        .row(ng-app="snowMonitor" ng-controller="MainCtrl")
+            .col-md-12
+                input.form-control(type="text", placeholder="table name" ng-model="table")
+                input.form-control(type="text", placeholder="query" ng-model="query")
+                input.form-control(type="text", placeholder="limit" ng-model="limit")
+                button.btn.btn-default.navbar-btn(type="button" ng-click="getSN()") SN CALL
+            .col-md-12
+                .well(ng-repeat="test in tests")
+                    div(ng-repeat="(k,v) in test")
+                        span.label.label-primary {{ k }}
+                        | {{ v.display_value }}
+            

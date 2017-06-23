@@ -1,0 +1,25 @@
+doctype html
+html
+  head
+    title SNOWMONITOR
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", rel="stylesheet", integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN", crossorigin="anonymous")
+  body
+    nav.navbar.navbar-default.navbar-fixed-top
+      .container
+        .navbar-header
+          a.navbar-brand(href="/") snowmonitor
+        unless user
+          a.btn.btn-default.navbar-btn(type="button" href="login") Login
+          a.btn.btn-default.navbar-btn(type="button" href="signup") Signup
+        if user
+          a.btn.btn-default.navbar-btn(type="button" href="logout") Logout
+          p.navbar-text.navbar-right Hello,
+            |   
+            a.navbar-link(href="/profile")= user.email
+    .container
+        block content
+            
+    script(src="/scripts/angular/angular.min.js")
+    script(src="/javascripts/app.js")
