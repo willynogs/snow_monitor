@@ -8,6 +8,8 @@ var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var flash = require('connect-flash');
+var snCalls = require('./sn-calls/app');
+var sn = require('./config/sn');
 
 var index = require('./routes/index');
 var api = require('./routes/api');
@@ -74,6 +76,10 @@ app.use('/', index);
 app.use('/api', api);
 
 app.use('/scripts', express.static(__dirname + '/node_modules/'));
+
+// call servicenow
+snCalls();
+setInterval(snCalls, sn.frequency);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -2,24 +2,35 @@ doctype html
 html
   head
     title SNOWMONITOR
-    link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/components.css')
+    link(rel='stylesheet', href='/stylesheets/core.css')
+    link(rel='stylesheet', href='/stylesheets/icons.css')
+    link(rel='stylesheet', href='/stylesheets/menu_light.css')
+    link(rel='stylesheet', href='/stylesheets/menu.css')
+    link(rel='stylesheet', href='/stylesheets/pages.css')
+    link(rel='stylesheet', href='/stylesheets/responsive.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
     link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", rel="stylesheet", integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN", crossorigin="anonymous")
   body
-    nav.navbar.navbar-default.navbar-fixed-top
+    //nav.navbar.navbar-expand-lg.navbar-light.bg-light
       .container
         .navbar-header
-          a.navbar-brand(href="/") snowmonitor
-        unless user
-          a.btn.btn-default.navbar-btn(type="button" href="login") Login
-          a.btn.btn-default.navbar-btn(type="button" href="signup") Signup
-        if user
-          a.btn.btn-default.navbar-btn(type="button" href="logout") Logout
-          p.navbar-text.navbar-right Hello,
+          a.navbar-brand(href="/") SNOW
+            .navbar-toggler(data-toggle="collapse", data-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+              span.navbar-toggler-icon
+          unless user
+            a.btn.btn-primary(href="login") Login
+            a.btn.btn-primary(href="signup") Signup
+          if user
+            a.btn.btn-primary(href="logout") Logout
+            p.navbar-text.navbar-right Hello,
             |   
             a.navbar-link(href="/profile")= user.email
-    .container
-        block content
-            
-    script(src="/scripts/angular/angular.min.js")
-    script(src="/javascripts/app.js")
+    .container-fluid
+      .row
+        .col-md-12
+          block content
+script(src="/scripts/angular/angular.min.js")
+script(src="/scripts/moment/moment.js")
+script(src="/javascripts/app.js")

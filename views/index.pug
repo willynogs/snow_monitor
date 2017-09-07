@@ -1,17 +1,138 @@
 extends layout
 
 block content
-    // here is where the snow monitor will go
-    if user
-        .row(ng-app="snowMonitor" ng-controller="MainCtrl")
-            .col-md-12
-                input.form-control(type="text", placeholder="table name" ng-model="table")
-                input.form-control(type="text", placeholder="query" ng-model="query")
-                input.form-control(type="text", placeholder="limit" ng-model="limit")
-                button.btn.btn-default.navbar-btn(type="button" ng-click="getSN()") SN CALL
-            .col-md-12
-                .well(ng-repeat="test in tests")
-                    div(ng-repeat="(k,v) in test")
-                        span.label.label-primary {{ k }}
-                        | {{ v.display_value }}
-            
+  // here is where the snow monitor will go
+  if user
+    .ng-wrap(ng-app="snowMonitor" ng-controller="MainCtrl" ng-init="init()")
+      .row
+        .col-sm-6.col-lg-4
+          .widget-simple-chart.card-box
+            .status-box.pull-right
+              i.fa.fa-sign-out.fa-3x(aria-hidden='true', ng-click="getChange()")
+            h3 Hello, Will Naugle
+            |
+            p.text-muted.text-nowrap {{ time }}
+        .col-sm-6.col-lg-2
+          .widget-simple-chart.text-right.card-box
+            .status-box.pull-left
+              i.fa.fa-check-circle-o.fa-5x.text-success(aria-hidden='true')                               
+            h3.text-success UP
+            |                                     
+            p.text-muted.text-nowrap SMTP
+        .col-sm-6.col-lg-2
+          .widget-simple-chart.text-right.card-box
+            .status-box.pull-left
+              i.fa.fa-check-circle-o.fa-5x.text-success(aria-hidden='true')                                 
+            h3.text-success UP
+            |                                     
+            p.text-muted.text-nowrap POP3
+        .col-sm-6.col-lg-2
+          .widget-simple-chart.text-right.card-box
+            .status-box.pull-left
+              i.fa.fa-times-circle-o.fa-5x.text-danger(aria-hidden='true')                                    
+            h3.text-danger DOWN
+            |                                     
+            p.text-muted.text-nowrap LDAP
+        .col-sm-6.col-lg-2
+          .widget-simple-chart.text-right.card-box  
+            .status-box.pull-left
+              i.fa.fa-check-circle-o.fa-5x.text-success(aria-hidden='true')                                  
+            h3.text-success UP
+            |                                     
+            p.text-muted.text-nowrap MID
+      .row
+        .col-lg-6
+          .card-box
+            h4.text-dark.header-title.m-t-0 Changes
+            |                                     
+            p.text-muted.m-b-25.font-13
+              | Here are all of the changes currently assigned to the Tool Team
+            |                                     
+            .table-responsive
+              table.table
+                thead
+                  tr
+                    th #
+                    |                                                 
+                    th Short Description
+                    |                                                 
+                    th State
+                    |                                                 
+                    th Assigned to
+                |                                             
+                tbody
+                  tr(ng-repeat="chg in changes track by $index")
+                    td {{ chg.number.display_value }}
+                    |                                                     
+                    td {{ chg.short_description.display_value }}
+                    |                                                                                                      
+                    td
+                      span.label.label-info {{ chg.state.display_value }}
+                    |                                                     
+                    td {{ chg.assigned_to.display_value }}
+                  |                                                 
+        .col-lg-6
+          .card-box
+            h4.text-dark.header-title.m-t-0 Incidents
+            |                                     
+            p.text-muted.m-b-25.font-13
+              | Here are all of the incidents currently assigned to the Tool Team
+            |                                     
+            .table-responsive
+              table.table
+                thead
+                  tr
+                   th #
+                    |                                                 
+                    th Project Name
+                    |                                                 
+                    th Start Date
+                    |                                                 
+                    th Due Date
+                    |                                                 
+                    th Status
+                    |                                                 
+                    th Assign
+                    |                                             
+                tbody
+                  tr
+                    td 1
+                    |                                                     
+                    td Minton Admin v1
+                    |                                                     
+                    td 01/01/2016
+                    |                                                     
+                    td 26/04/2016
+                    |                                                     
+                    td
+                      span.label.label-info Released
+                      |                                                     
+                      td Coderthemes
+                      |                                                 
+                      tr
+                        td 2
+                        |                                                     
+                        td Minton Frontend v1
+                        |                                                     
+                        td 01/01/2016
+                        |                                                     
+                        td 26/04/2016
+                        |                                                     
+                        td
+                          span.label.label-success Released
+                          |                                                     
+                          td Minton admin
+    //div(ng-app="snowMonitor" ng-controller="MainCtrl" ng-init="init()")
+      .col-md-12
+        h4
+          span.badge.badge-secondary {{ time }}
+      .card.col-md-4
+        .card-body
+          input.form-control(type="text", placeholder="table name" ng-model="table")
+          input.form-control(type="text", placeholder="query" ng-model="query")
+          input.form-control(type="text", placeholder="limit" ng-model="limit")
+          button.btn.btn-block.btn-default.navbar-btn(type="button" ng-click="getSN()") SN CALL
+      .card(ng-repeat="test in tests")
+        .card-body
+          ul.list-group.list-group-flush(ng-repeat="(k,v) in test")
+            li.list-group-item {{ k }}: {{ v.display_value }}

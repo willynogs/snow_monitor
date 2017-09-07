@@ -3,14 +3,15 @@ var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 var SN = require('../models/servicenow');
 var router = express.Router();
-var sn = require('../sn-calls/table');
+var snTable = require('../sn-calls/table');
+var snChange = require('../sn-calls/change');
 
 router.post('/servicenowtest', require('connect-ensure-login').ensureLoggedIn(), function(req, res){
-    sn(req.body.table, req.body.query, req.body.limit)
+    snTable(req.body.table, req.body.query, req.body.limit)
         .end(response => {
             if(res.code == 200) {
                 var nw = new SN;
-                nw.table = tableName;
+                nw.type = tableName;
                 nw.data = res.body;
                 nw.save(function(err, doc){
                     if(err) { console.log(err); }
@@ -20,6 +21,15 @@ router.post('/servicenowtest', require('connect-ensure-login').ensureLoggedIn(),
             }
             res.json(response);
         });
+});
+
+router.get('/change', require('connect-ensure-login').ensureLoggedIn(), function(req, res){
+    SN.findOne({type: "team-change"}).sort('-date').exec(function(err, doc){
+      if(err) { console.log(err); }
+      else {
+        res.json(doc.data.result);
+      }
+    });
 });
 
 module.exports = router;

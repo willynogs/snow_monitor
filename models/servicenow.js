@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 
 var snSchema = mongoose.Schema({
-  table: String,
+  type: String,
   data: {}
 });
 

@@ -1,7 +1,14 @@
 var app = angular.module('snowMonitor', []);
 
-app.controller('MainCtrl', function($scope, $http){
+app.controller('MainCtrl', function($scope, $http, $interval){
     $scope.tests = [];
+    $scope.changes = [];
+
+    $scope.init = function(){
+        tick();
+        $interval(tick, 1000);
+        changeRest();
+    };
 
     $scope.getSN = function(){
         var data = {
@@ -15,4 +22,23 @@ app.controller('MainCtrl', function($scope, $http){
                 console.log(res.data.body.result);
             });
     };
+
+    $scope.getChange = function(){
+      changeRest();
+    };
+
+    /* ~~~~~~~~~~~~~~~~~~~~~~~ */
+    /* ~~ private functions ~~ */
+    /* ~~~~~~~~~~~~~~~~~~~~~~~ */
+
+    function tick(){
+        $scope.time = moment().format('MMMM Do YYYY, h:mm:ss a');
+    }
+
+    function changeRest() {
+      $http.get('/api/change')
+        .then(res => {
+          $scope.changes = res.data;
+        });
+    }
 });
