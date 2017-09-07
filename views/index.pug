@@ -1,15 +1,16 @@
 extends layout
 
 block content
-  // here is where the snow monitor will go
   if user
     .ng-wrap(ng-app="snowMonitor" ng-controller="MainCtrl" ng-init="init()")
       .row
         .col-sm-6.col-lg-4
           .widget-simple-chart.card-box
             .status-box.pull-right
-              i.fa.fa-sign-out.fa-3x(aria-hidden='true', ng-click="getChange()")
-            h3 Hello, Will Naugle
+              a(href='logout')
+                i.fa.fa-sign-out.fa-3x(aria-hidden='true')
+            h3 Hello, 
+              a(href='profile') Will Naugle
             |
             p.text-muted.text-nowrap {{ time }}
         .col-sm-6.col-lg-2
@@ -69,8 +70,7 @@ block content
                     td
                       span.label.label-info {{ chg.state.display_value }}
                     |                                                     
-                    td {{ chg.assigned_to.display_value }}
-                  |                                                 
+                    td {{ chg.assigned_to.display_value }}                                               
         .col-lg-6
           .card-box
             h4.text-dark.header-title.m-t-0 Incidents
@@ -84,55 +84,27 @@ block content
                   tr
                    th #
                     |                                                 
-                    th Project Name
+                    th Short Description
+                    |                                                                                                
+                    th State
                     |                                                 
-                    th Start Date
-                    |                                                 
-                    th Due Date
-                    |                                                 
-                    th Status
-                    |                                                 
-                    th Assign
+                    th Assigned to
                     |                                             
                 tbody
-                  tr
-                    td 1
+                  tr(ng-repeat="inc in incidents track by $index")
+                    td {{ inc.number.display_value }}
                     |                                                     
-                    td Minton Admin v1
-                    |                                                     
-                    td 01/01/2016
-                    |                                                     
-                    td 26/04/2016
-                    |                                                     
+                    td {{ inc.short_description.display_value }}
+                    |                                                                                                       
                     td
-                      span.label.label-info Released
-                      |                                                     
-                      td Coderthemes
-                      |                                                 
-                      tr
-                        td 2
-                        |                                                     
-                        td Minton Frontend v1
-                        |                                                     
-                        td 01/01/2016
-                        |                                                     
-                        td 26/04/2016
-                        |                                                     
-                        td
-                          span.label.label-success Released
-                          |                                                     
-                          td Minton admin
-    //div(ng-app="snowMonitor" ng-controller="MainCtrl" ng-init="init()")
-      .col-md-12
-        h4
-          span.badge.badge-secondary {{ time }}
-      .card.col-md-4
-        .card-body
-          input.form-control(type="text", placeholder="table name" ng-model="table")
-          input.form-control(type="text", placeholder="query" ng-model="query")
-          input.form-control(type="text", placeholder="limit" ng-model="limit")
-          button.btn.btn-block.btn-default.navbar-btn(type="button" ng-click="getSN()") SN CALL
-      .card(ng-repeat="test in tests")
-        .card-body
-          ul.list-group.list-group-flush(ng-repeat="(k,v) in test")
-            li.list-group-item {{ k }}: {{ v.display_value }}
+                      span.label.label-info {{ inc.state.display_value }}
+                    |                                                     
+                    td {{ inc.assigned_to.display_value }}
+                    |                                                 
+  if !user
+      .col-lg-6.col-lg-offset-3
+        .card-box.no-user-splash
+          a.btn.btn-primary(href="login") login
+          | -or-
+          a.btn.btn-warning(href="signup") sign up
+          

@@ -3,11 +3,13 @@ var app = angular.module('snowMonitor', []);
 app.controller('MainCtrl', function($scope, $http, $interval){
     $scope.tests = [];
     $scope.changes = [];
+    $scope.incidents = [];
 
     $scope.init = function(){
         tick();
         $interval(tick, 1000);
         changeRest();
+        incidentRest();
     };
 
     $scope.getSN = function(){
@@ -39,6 +41,14 @@ app.controller('MainCtrl', function($scope, $http, $interval){
       $http.get('/api/change')
         .then(res => {
           $scope.changes = res.data;
+        });
+    }
+
+    function incidentRest() {
+      $http.get('/api/incident')
+        .then(res => {
+          $scope.incidents = res.data;
+          console.log(res.data);
         });
     }
 });

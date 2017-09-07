@@ -32,4 +32,13 @@ router.get('/change', require('connect-ensure-login').ensureLoggedIn(), function
     });
 });
 
+router.get('/incident', require('connect-ensure-login').ensureLoggedIn(), function(req, res){
+    SN.findOne({type: "team-incident"}).sort('-date').exec(function(err, doc){
+      if(err) { console.log(err); }
+      else {
+        res.json(doc.data.result);
+      }
+    });
+});
+
 module.exports = router;

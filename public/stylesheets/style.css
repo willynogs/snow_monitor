@@ -9,3 +9,9 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+.no-user-splash {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
