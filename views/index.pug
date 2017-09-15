@@ -10,7 +10,7 @@ block content
               a(href='logout')
                 i.fa.fa-sign-out.fa-3x(aria-hidden='true')
             h3 Hello, 
-              a(href='profile') Will Naugle
+              a(href='profile')= user.email
             |
             p.text-muted.text-nowrap {{ time }}
         .col-sm-6.col-lg-2

@@ -4,6 +4,7 @@ var SN = require('../models/servicenow');
 var snTable = require("./table");
 var snChange = require("./change");
 var snIncident = require("./incident");
+var snVersion = require("./version");
 
 // method for the servicenow table api
 module.exports = function(){
@@ -34,4 +35,33 @@ module.exports = function(){
         console.log('bad');
       }
     });
+
+  snVersion('osuitsm')
+    .end(response => {
+      handleVersion(response);
+    });
+  snVersion('osuitsmdev')
+    .end(response => {
+      handleVersion(response);
+    });
+  snVersion('osuitsmtest')
+    .end(response => {
+      handleVersion(response);
+    });
+  snVersion('osuittraining')
+    .end(response => {
+      handleVersion(response);
+    });
+  snVersion('osuituat')
+    .end(response => {
+      handleVersion(response);
+    });
+
+  function handleVersion(response) {
+    var raw = response.body.result.pop();
+    var ver = raw.to_version.split('-');
+    var patch = ver[4].split('__')[1];
+    var res = ver[1] + ' ' + patch;
+    console.log(res);
+  }
 };

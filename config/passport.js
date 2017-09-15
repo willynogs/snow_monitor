@@ -3,6 +3,10 @@ var LocalStrategy = require('passport-local').Strategy;
 // load up the user model
 var User = require('../models/user');
 
+var sn = require('../config/sn');
+var btoa = require('btoa');
+var unirest = require('unirest');
+
 // expose this function to our app using module.exports
 module.exports = function(passport) {
 
@@ -41,37 +45,44 @@ module.exports = function(passport) {
       // asynchronous
       // User.findOne wont fire unless data is sent back
       process.nextTick(function() {
-
-        // find a user whose email is the same as the forms email
-        // we are checking to see if the user trying to login already exists
-        User.findOne({
-          'email': email
-        }, function(err, user) {
-          // if there are any errors, return the error
-          if (err)
-            return done(err);
-
-          // check to see if theres already a user with that email
-          if (user) {
-            return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+        var url = `https://${sn.instance}.service-now.com/api/now/table/sys_user?sysparm_query=GOTOuser_name=${email}^employee_number=${req.body.osuid}&sysparm_display_value=all`;
+        unirest.get(url).headers({'Accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': 'Basic ' + btoa(sn.username + ':' + sn.password)})
+        .end(response => {
+          if(response.body.result.length < 1) {
+            return done(null, false, req.flash('signupMessage', 'Invalid Name.n or OSU ID'));
           } else {
-
-            // if there is no user with that email
-            // create the user
-            var newUser = new User();
-
-            // set the user's local credentials
-            newUser.email = email;
-            newUser.password = newUser.generateHash(password);
-
-            // save the user
-            newUser.save(function(err) {
+            // find a user whose email is the same as the forms email
+            // we are checking to see if the user trying to login already exists
+            User.findOne({
+              'email': email
+            }, function(err, user) {
+              // if there are any errors, return the error
               if (err)
-                throw err;
-              return done(null, newUser);
+                return done(err);
+
+              // check to see if theres already a user with that email
+              if (user) {
+                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+              } else {
+
+                // if there is no user with that email
+                // create the user
+                var newUser = new User();
+
+                // set the user's local credentials
+                newUser.email = email;
+                newUser.password = newUser.generateHash(password);
+
+                // save the user
+                newUser.save(function(err) {
+                  if (err)
+                    throw err;
+                  return done(null, newUser);
+                });
+              }
+
             });
           }
-
         });
 
       });
